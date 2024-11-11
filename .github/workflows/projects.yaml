@@ -25,7 +25,7 @@ jobs:
           projects=$(jq -r '.[]' profile/projects.json)
 
           # Generate markdown list
-          list="## project list\n"
+          list="## project list\n\n"
           for project in $projects; do
             list="$list- [${project}](https://${project}.trueberryless.org)\n"
           done
