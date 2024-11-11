@@ -1,0 +1,11 @@
+{
+    "name": "Deployment Workflow",
+    "description": "Deployment CI workflow template.",
+    "iconName": "octicon squirrel",
+    "categories": [
+        "continuous-integration"
+    ],
+    "filePatterns": [
+        "^Dockerfile"
+    ]
+}
