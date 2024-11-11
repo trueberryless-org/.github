@@ -7,5 +7,5 @@ cool languages, git, github actions, docker, argocd, k3s, cilium
 ## project list
 
 - [mutanuq](https://mutanuq.trueberryless.org)
-- [true-tracker](https://true-tracker.trueberryless.org)
-- [mutanuq](https://mutanuq.trueberryless.org)
+- [starlight-cooler-config](https://starlight-cooler-config.trueberryless.org)
+
