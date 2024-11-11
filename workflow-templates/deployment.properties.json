@@ -3,7 +3,7 @@
     "description": "Deployment CI workflow template.",
     "iconName": "octicon squirrel",
     "categories": [
-        "continuous-integration"
+        "deployment"
     ],
     "filePatterns": [
         "^Dockerfile"
