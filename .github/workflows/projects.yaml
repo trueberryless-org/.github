@@ -1,0 +1,44 @@
+name: Update README with Project List
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Generate project list for README
+        id: generate-list
+        run: |
+          # Read and parse JSON file
+          projects=$(jq -r '.[]' profile/projects.json)
+
+          # Generate markdown list
+          list="## Project List\n"
+          for project in $projects; do
+            list="$list- [${project}](https://${project}.trueberryless.org)\n"
+          done
+
+          # Write to a temporary file for the next step
+          echo "$list" > project-list.md
+
+      - name: Update README.md
+        run: |
+          # Replace the section in README.md
+          sed -i '/## Project List/,$d' README.md
+          cat project-list.md >> README.md
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update project list in README"
+          file_pattern: README.md
