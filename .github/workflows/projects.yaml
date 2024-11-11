@@ -32,6 +32,7 @@ jobs:
 
           # Write to a temporary file for the next step
           echo "$list" > project-list.md
+          echo "$list"
 
       - name: Update README.md
         run: |
