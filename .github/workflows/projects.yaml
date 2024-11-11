@@ -24,10 +24,10 @@ jobs:
           # Read and parse JSON file
           projects=$(jq -r '.[]' profile/projects.json)
 
-          # Generate markdown list
+          # Generate markdown list in lowercase
           list="## project list\n\n"
           for project in $projects; do
-            list="$list- [${project}](https://${project}.trueberryless.org)\n"
+            list="$list- [${project,,}](https://${project,,}.trueberryless.org)\n"
           done
 
           # Write to a temporary file for the next step
@@ -35,7 +35,7 @@ jobs:
 
       - name: Update README.md
         run: |
-          # Replace the section in README.md
+          # Replace the section in README.md after "## project list"
           sed -i '/## project list/,$d' README.md
           cat project-list.md >> README.md
 
