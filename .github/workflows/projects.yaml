@@ -10,7 +10,7 @@ jobs:
   update-readme:
     runs-on: ubuntu-latest
     permission:
-      content: write
+      contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
