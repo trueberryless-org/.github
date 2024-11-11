@@ -1,8 +1,16 @@
 The organisation for deploying all the stuff from [trueberryless](https://github.com/trueberryless)
 
-## tech stack
+## ci
 
-cool languages, git, github actions, docker, argocd, k3s, cilium
+- cool languages
+- git
+- github actions
+- docker
+- argocd
+- k3s
+- cilium
+- cloudflare
+- self-host
 
 ## project list
 
