@@ -13,7 +13,7 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - $default-branch
 
 jobs:
   release:
