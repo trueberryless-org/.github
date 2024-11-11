@@ -36,9 +36,8 @@ jobs:
       - name: Update README.md
         run: |
           # Replace the section in README.md after "## project list"
-          sed -i '/## project list/,$d' README.md
-          cat project-list.md >> README.md
-          cat README.md
+          sed -i '/## project list/,$d' profile/README.md
+          cat project-list.md >> profile/README.md
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4
