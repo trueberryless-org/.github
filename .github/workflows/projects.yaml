@@ -42,3 +42,4 @@ jobs:
         with:
           commit_message: "Update project list in README"
           file_pattern: README.md
+          token: ${{ secrets.PUBLIC_GITHUB_TOKEN }}
