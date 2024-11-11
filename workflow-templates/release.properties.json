@@ -1,0 +1,11 @@
+{
+    "name": "Release Workflow",
+    "description": "Release CI workflow template.",
+    "iconName": "octicon diff",
+    "categories": [
+        "Automation"
+    ],
+    "filePatterns": [
+        "package.json$"
+    ]
+}
