@@ -1,0 +1,100 @@
+# TODO:
+# - set DIRECTORY_PATH
+# - add "packageManager": "pnpm@9.3.0", to DIRECOTRY_PATH/package.json
+
+name: Deployment
+
+on:
+  push:
+    branches: 
+      - $default-branch
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deployment:
+    if: contains(github.event.head_commit.message, 'deploy') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: docker.io
+      NODE_VERSION: 20
+      DIRECTORY_PATH: /docs
+    permissions:
+      contents: write
+    steps:
+      - name: Set IMAGE_NAME
+        run: echo "IMAGE_NAME=trueberryless/${{ github.repository }}" >> $GITHUB_ENV
+        
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set IMAGE_TAG
+        run: |
+          VERSION=$(jq -r '.version' ".${{ env.DIRECTORY_PATH }}/package.json")
+          echo "IMAGE_TAG=$VERSION" >> $GITHUB_ENV
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          package_json_file: .${{ env.DIRECTORY_PATH }}/package.json
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+        shell: bash
+        working-directory: .${{ env.DIRECTORY_PATH }}
+
+      - name: Build website
+        run: pnpm run build
+        shell: bash
+        working-directory: .${{ env.DIRECTORY_PATH }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_NAME }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Update deployment.yaml file
+        run: |
+          yq eval '.spec.template.spec.containers[0].image = "${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"' -i manifest/deployment.yaml
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: update deployment.yaml container image (automated)
+
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.IMAGE_TAG }}
+          makeLatest: true
+          body: "A docker image has been deployed to [Docker Hub](https://hub.docker.com/r/${{ env.IMAGE_NAME }}/tags)."
