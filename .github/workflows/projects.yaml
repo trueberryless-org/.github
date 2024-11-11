@@ -31,7 +31,7 @@ jobs:
           done
 
           # Write to a temporary file for the next step
-          echo "$list" > project-list.md
+          echo -e "$list" > project-list.md
 
       - name: Update README.md
         run: |
@@ -43,4 +43,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update project list in README"
-          file_pattern: README.md
+          file_pattern: profile/README.md
