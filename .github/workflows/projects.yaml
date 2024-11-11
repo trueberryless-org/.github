@@ -9,6 +9,8 @@ on:
 jobs:
   update-readme:
     runs-on: ubuntu-latest
+    permission:
+      content: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -42,4 +44,3 @@ jobs:
         with:
           commit_message: "Update project list in README"
           file_pattern: README.md
-          token: ${{ secrets.PUBLIC_GITHUB_TOKEN }}
