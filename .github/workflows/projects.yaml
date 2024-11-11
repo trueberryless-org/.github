@@ -32,13 +32,13 @@ jobs:
 
           # Write to a temporary file for the next step
           echo "$list" > project-list.md
-          echo "$list"
 
       - name: Update README.md
         run: |
           # Replace the section in README.md after "## project list"
           sed -i '/## project list/,$d' README.md
           cat project-list.md >> README.md
+          cat README.md
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4
