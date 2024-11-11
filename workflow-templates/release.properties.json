@@ -3,7 +3,7 @@
     "description": "Release CI workflow template.",
     "iconName": "octicon diff",
     "categories": [
-        "Automation"
+        "Changeset"
     ],
     "filePatterns": [
         "package.json$"
