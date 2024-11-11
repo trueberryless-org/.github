@@ -1,0 +1,53 @@
+# TODO: 
+# - Follow instructions: https://pnpm.io/using-changesets
+# - Add script: "version": "pnpm changeset version && pnpm i --no-frozen-lockfile"
+# - Run: pnpm add -Dw @changesets/changelog-github
+# - Config changeset:
+#   "changelog": [
+#     "@changesets/changelog-github",
+#     { "repo": "trueberryless-org/{repo}" }
+#   ],
+
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    if: ${{ github.repository_owner == 'trueberryless-org' }}
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Create Release Pull Request
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version
+          publish: pnpm changeset publish
+          commit: '[ci] release'
+          title: '[ci] release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PUBLIC_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
