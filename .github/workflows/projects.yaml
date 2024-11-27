@@ -22,7 +22,7 @@ jobs:
         id: generate-list
         run: |
           # Read and parse JSON file
-          projects=$(jq -r '.[]' profile/projects.json)
+          projects=$(jq -r '.[]' https://gist.githubusercontent.com/trueberryless/1dbf7d853cbcb6c027234d42c269eea4/raw)
 
           # Generate markdown list in lowercase
           list="## project list\n\n"
