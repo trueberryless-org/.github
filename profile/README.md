@@ -1,1 +1,0 @@
-![](../.github/assets/banner.png)
