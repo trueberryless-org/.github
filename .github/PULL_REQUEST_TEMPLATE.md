@@ -6,6 +6,11 @@
 - What does this PR change? Give us a brief description.
 - Did you change something visual? A before/after screenshot can be helpful.
 
+#### AI Disclosure
+
+- [ ] This PR uses AI-generated code or logic.
+- [ ] I have reviewed the output, verified the logic, and take full responsibility for it.
+
 <!--
 Here’s what will happen next:
 One or more of our maintainers will take a look and may ask you to make changes.
